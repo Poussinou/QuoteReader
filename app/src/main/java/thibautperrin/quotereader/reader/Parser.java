@@ -1,7 +1,5 @@
 package thibautperrin.quotereader.reader;
 
-import android.util.Log;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.Document;
@@ -67,7 +65,6 @@ class Parser {
                         if (number < 2000000) { // Situation of a picture, a VDM people, or something like that.
                             continue;
                         }
-                        Log.d("NUMBER", id);
                     } catch (NumberFormatException e) {
                         throw new WebPageChangedException("VDM webpage changed.", url, e);
                     }
@@ -93,7 +90,6 @@ class Parser {
                 }
 
                 Vdm vdm = new Vdm(content, number, endUrl);
-                Log.d("URL", endUrl);
                 list.add(vdm);
             }
             return list;
