@@ -47,6 +47,17 @@ public class PlaceHolderFragmentDTC extends Fragment {
                 startActivity(browserIntent);
             }
         });
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Dtc dtc = dtcs.get(position);
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.share_quote, "DTC", dtc.getStringContent(), dtc.getUrl()));
+                startActivity(Intent.createChooser(intent, dtc.getStringContent()));
+                return true;
+            }
+        });
         return rootView;
     }
 

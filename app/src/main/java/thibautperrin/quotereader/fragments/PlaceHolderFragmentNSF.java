@@ -47,6 +47,17 @@ public class PlaceHolderFragmentNSF extends Fragment {
                 startActivity(browserIntent);
             }
         });
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Nsf nsf = nsfs.get(position);
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.share_quote, "NSF", nsf.getContent(), nsf.getUrl()));
+                startActivity(Intent.createChooser(intent, nsf.getContent()));
+                return true;
+            }
+        });
         return rootView;
     }
 

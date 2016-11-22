@@ -47,6 +47,17 @@ public class PlaceHolderFragmentVDM extends Fragment {
                 startActivity(browserIntent);
             }
         });
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Vdm vdm = vdms.get(position);
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.share_quote, "VDM", vdm.getContent(), vdm.getUrl()));
+                startActivity(Intent.createChooser(intent, vdm.getContent()));
+                return true;
+            }
+        });
         return rootView;
     }
 

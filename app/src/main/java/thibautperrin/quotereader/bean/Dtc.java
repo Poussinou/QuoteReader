@@ -45,6 +45,14 @@ public class Dtc implements Comparable<Dtc>{
         }
     }
 
+    public String getStringContent() {
+        String result = "";
+        for (Sentence sentence : content) {
+            result += sentence.getAuthor() + sentence.getContent() + "\r\n";
+        }
+        return result;
+    }
+
     public String getUrl() {
         return "http://www.danstonchat.com/" + number + ".html";
     }
