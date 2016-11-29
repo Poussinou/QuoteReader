@@ -39,23 +39,23 @@ public class PlaceHolderFragmentNSF extends Fragment {
         final ArrayList<Nsf> nsfs = new ArrayList<>();
         NsfArrayAdapter nsfArrayAdapter = new NsfArrayAdapter(rootView.getContext(), R.layout.nsf_view, nsfs);
         listView.setAdapter(nsfArrayAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 String url = nsfs.get(position).getUrl();
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 startActivity(browserIntent);
+                return true;
             }
         });
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Nsf nsf = nsfs.get(position);
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("text/plain");
                 intent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.share_quote, "NSF", nsf.getContent(), nsf.getUrl()));
                 startActivity(Intent.createChooser(intent, nsf.getContent()));
-                return true;
             }
         });
         return rootView;
