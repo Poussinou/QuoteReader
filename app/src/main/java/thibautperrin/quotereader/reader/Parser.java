@@ -105,7 +105,7 @@ class Parser {
     public static List<Nsf> getNsfPage(int pageNumber) throws NotExistingUrlException, WebPageChangedException {
         // Load the web page:
         Document doc;
-        String url = "http://nuitsansfolie.com/list?page=" + pageNumber;
+        String url = "http://nuitsansfolie.com/nsf/last?page=" + pageNumber;
         try {
             doc = Jsoup.connect(url).timeout(5000).get();
         } catch (IOException ex) {
