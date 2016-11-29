@@ -55,7 +55,13 @@ public class PlaceHolderFragmentNSF extends Fragment {
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("text/plain");
                 intent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.share_quote, "NSF", nsf.getContent(), nsf.getUrl()));
-                startActivity(Intent.createChooser(intent, nsf.getContent()));
+                String shortenContent;
+                if (nsf.getContent().length() > 150) {
+                    shortenContent = getResources().getString(R.string.title_share, "NSF") + nsf.getContent().substring(0, 150) + " […]";
+                } else {
+                    shortenContent = getResources().getString(R.string.title_share, "NSF") + nsf.getContent();
+                }
+                startActivity(Intent.createChooser(intent, shortenContent));
             }
         });
         return rootView;

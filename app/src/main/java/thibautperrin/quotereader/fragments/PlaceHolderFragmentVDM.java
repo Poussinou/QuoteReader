@@ -55,7 +55,13 @@ public class PlaceHolderFragmentVDM extends Fragment {
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("text/plain");
                 intent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.share_quote, "VDM", vdm.getContent(), vdm.getUrl()));
-                startActivity(Intent.createChooser(intent, vdm.getContent()));
+                String shortenContent;
+                if (vdm.getContent().length() > 150) {
+                    shortenContent = getResources().getString(R.string.title_share, "VDM") + vdm.getContent().substring(0, 150) + " […]";
+                } else {
+                    shortenContent = getResources().getString(R.string.title_share, "VDM") + vdm.getContent();
+                }
+                startActivity(Intent.createChooser(intent, shortenContent));
             }
         });
         return rootView;

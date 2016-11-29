@@ -13,4 +13,5 @@
 La page officielle est ici: %3$s
 \r\n\r\n
 Personnellement, je l\'ai lu sur cette application: https://play.google.com/store/apps/details?id=thibautperrin.quotereader&amp;hl=fr</string>
+    <string name="title_share">Partager la %1$s :\r\n</string>
 </resources>

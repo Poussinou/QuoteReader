@@ -55,7 +55,13 @@ public class PlaceHolderFragmentDTC extends Fragment {
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("text/plain");
                 intent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.share_quote, "DTC", dtc.getStringContent(), dtc.getUrl()));
-                startActivity(Intent.createChooser(intent, dtc.getStringContent()));
+                String shortenContent;
+                if (dtc.getStringContent().length() > 150) {
+                    shortenContent = getResources().getString(R.string.title_share, "DTC") + dtc.getStringContent().substring(0, 150) + " […]";
+                } else {
+                    shortenContent = getResources().getString(R.string.title_share, "DTC") + dtc.getStringContent();
+                }
+                startActivity(Intent.createChooser(intent, shortenContent));
             }
         });
         return rootView;
