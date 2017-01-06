@@ -1,7 +1,9 @@
 package thibautperrin.quotereader.adapters;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteException;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,11 +33,15 @@ public class NsfArrayAdapter extends ArrayAdapter<Nsf> implements MainActivityHa
     }
 
     private void loadNsf() {
-        DaoNsf daoNsf = new DaoNsf(context);
-        daoNsf.open();
-        List<Nsf> loadedNsfs = daoNsf.getNsf();
-        daoNsf.close();
-        addAll(loadedNsfs);
+        try {
+            DaoNsf daoNsf = new DaoNsf(context);
+            daoNsf.open();
+            List<Nsf> loadedNsfs = daoNsf.getNsf();
+            daoNsf.close();
+            addAll(loadedNsfs);
+        } catch (SQLiteException ex) {
+            Log.e("VdmArrayAdapter", "Database is probably locked", ex);
+        }
     }
 
     @NonNull

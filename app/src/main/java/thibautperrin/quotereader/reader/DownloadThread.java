@@ -68,10 +68,7 @@ public class DownloadThread extends Thread {
             List<Vdm> page;
             try {
                 page = Parser.getVdmPage(pageNumber);
-            } catch (NotExistingUrlException ex) {
-                ex.printStackTrace();
-                break;
-            } catch (WebPageChangedException ex) {
+            } catch (NotExistingUrlException | WebPageChangedException ex) {
                 daoVdm.rollbackTransaction();
                 daoVdm.close();
                 ex.printStackTrace();
@@ -113,9 +110,7 @@ public class DownloadThread extends Thread {
             List<Dtc> dtcs;
             try {
                 dtcs = Parser.getDtcPage(pageNumber);
-            } catch (NotExistingUrlException ex) {
-                break;
-            } catch (WebPageChangedException e) {
+            } catch (NotExistingUrlException | WebPageChangedException e) {
                 daoDtc.rollbackTransaction();
                 daoDtc.close();
                 handler.obtainMessage(PARSING_ERROR_DTC).sendToTarget();
@@ -151,9 +146,7 @@ public class DownloadThread extends Thread {
             List<Nsf> nsfs;
             try {
                 nsfs = Parser.getNsfPage(pageNumber);
-            } catch (NotExistingUrlException e) {
-                break;
-            } catch (WebPageChangedException e) {
+            } catch (NotExistingUrlException | WebPageChangedException e) {
                 daoNsf.rollbackTransaction();
                 daoNsf.close();
                 handler.obtainMessage(PARSING_ERROR_NSF).sendToTarget();
