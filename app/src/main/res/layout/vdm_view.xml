@@ -17,10 +17,4 @@
         android:id="@+id/vdm_content"
         android:textColor="@color/black" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/vdm_number"
-        android:textColor="@color/colorPrimary"/>
-
 </LinearLayout>

@@ -5,32 +5,25 @@ import android.support.annotation.NonNull;
 
 import org.jetbrains.annotations.NotNull;
 
-public class Vdm implements Comparable<Vdm>{
+public class Vdm implements Comparable<Vdm> {
     private final int index;
     private final String content;
-    private final long number;
     private final String endUrl;
 
-    public Vdm(@NotNull String content, long number, @NotNull String endUrl) {
+    public Vdm(@NotNull String content, @NotNull String endUrl) {
         this.index = -1;
         this.content = content;
-        this.number = number;
         this.endUrl = endUrl;
     }
 
-    public Vdm(int index, @NotNull String content, long number, @NotNull String endUrl) {
+    public Vdm(int index, @NotNull String content, @NotNull String endUrl) {
         this.index = index;
         this.content = content;
-        this.number = number;
         this.endUrl = endUrl;
     }
 
     public String getContent() {
         return content;
-    }
-
-    public long getNumber() {
-        return number;
     }
 
     public String getEndUrl() {
@@ -43,12 +36,12 @@ public class Vdm implements Comparable<Vdm>{
 
     @Override
     public String toString() {
-        return "VDM #" + number + " : " + content + "\n(" + getUrl() + ")";
+        return "VDM : " + content + "\n(" + getUrl() + ")";
     }
 
     @Override
     public boolean equals(Object o) {
-        return o instanceof Vdm && this.number == ((Vdm) o).number;
+        return o instanceof Vdm && this.content.equals(((Vdm) o).content);
     }
 
     @Override

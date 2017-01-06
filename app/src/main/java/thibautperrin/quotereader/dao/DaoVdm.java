@@ -21,19 +21,8 @@ public class DaoVdm extends Dao {
         db = dbHelper.getWritableDatabase();
     }
 
-    public boolean contains(long vdmNumber) {
-        Cursor cursor = db.query(SQLiteOpenHelperVdm.TABLE_NAME, new String[0], SQLiteOpenHelperVdm.COLUMN_VDM_NO + "= ?", new String[]{Long.toString(vdmNumber)}, null, null, null);
-        int size = cursor.getCount();
-        cursor.close();
-        if (size > 1) {
-            throw new RuntimeException("There should be at most on VDM with number : " + vdmNumber);
-        }
-        return size == 1;
-    }
-
     public void addVdm(Vdm vdm) {
         ContentValues values = new ContentValues();
-        values.put(SQLiteOpenHelperVdm.COLUMN_VDM_NO, vdm.getNumber());
         values.put(SQLiteOpenHelperVdm.COLUMN_VDM_CONTENT, vdm.getContent());
         values.put(SQLiteOpenHelperVdm.COLUMN_VDM_END_URL, vdm.getEndUrl());
         db.insert(SQLiteOpenHelperVdm.TABLE_NAME, null, values);
@@ -45,18 +34,12 @@ public class DaoVdm extends Dao {
                 SQLiteOpenHelperVdm.COLUMN_VDM_INDEX + " ASC");
         ArrayList<Vdm> res = new ArrayList<>();
         while (cursor.moveToNext()) {
-
-
             int index = cursor.getInt(0);
-            String content = cursor.getString(2);
-            long number = cursor.getLong(1);
-            String endUrl = cursor.getString(3);
+            String content = cursor.getString(1);
+            String endUrl = cursor.getString(2);
             if (content == null) content = "";
             if (endUrl == null) endUrl = "";
-            Vdm vdm = new Vdm(index,
-                    content,
-                    number,
-                    endUrl);
+            Vdm vdm = new Vdm(index, content, endUrl);
             res.add(vdm);
         }
         cursor.close();

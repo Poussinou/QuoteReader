@@ -13,7 +13,6 @@ import android.widget.TextView;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 import thibautperrin.quotereader.MainActivityHandler;
 import thibautperrin.quotereader.R;
@@ -53,9 +52,7 @@ public class VdmArrayAdapter extends ArrayAdapter<Vdm> implements MainActivityHa
             convertView = LayoutInflater.from(context).inflate(R.layout.vdm_view, parent, false);
         }
         TextView textViewContent = (TextView) convertView.findViewById(R.id.vdm_content);
-        TextView textViewNumber= (TextView) convertView.findViewById(R.id.vdm_number);
         textViewContent.setText(vdm.getContent());
-        textViewNumber.setText(String.format(Locale.getDefault(), "%d", vdm.getNumber()));
         return convertView;
     }
 

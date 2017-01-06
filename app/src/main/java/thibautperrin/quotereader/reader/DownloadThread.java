@@ -16,7 +16,12 @@ import thibautperrin.quotereader.dao.DaoVdm;
 import thibautperrin.quotereader.reader.parserException.NotExistingUrlException;
 import thibautperrin.quotereader.reader.parserException.WebPageChangedException;
 
-import static thibautperrin.quotereader.StaticFields.*;
+import static thibautperrin.quotereader.StaticFields.DTCS_DOWNLOADED;
+import static thibautperrin.quotereader.StaticFields.NSFS_DOWNLOADED;
+import static thibautperrin.quotereader.StaticFields.PARSING_ERROR_DTC;
+import static thibautperrin.quotereader.StaticFields.PARSING_ERROR_NSF;
+import static thibautperrin.quotereader.StaticFields.PARSING_ERROR_VDM;
+import static thibautperrin.quotereader.StaticFields.VDMS_DOWNLOADED;
 
 /**
  * This thread takes care of downloading the new VDM, DTC, NSF and to retrieve these in database.
@@ -40,9 +45,9 @@ public class DownloadThread extends Thread {
     public void run() {
         while (shouldContinue.get()) {
             while (download.get()) {
-                downloadVdm();
-                downloadDtc();
                 downloadNsf();
+                downloadDtc();
+                downloadVdm();
                 download.set(false);
             }
             try {
@@ -53,7 +58,7 @@ public class DownloadThread extends Thread {
         }
     }
 
-    public void quit(){
+    public void quit() {
         shouldContinue.set(false);
         this.interrupt();
     }
@@ -62,7 +67,8 @@ public class DownloadThread extends Thread {
         DaoVdm daoVdm = new DaoVdm(context);
         daoVdm.open();
         daoVdm.startTransaction();
-        ArrayList<Vdm> lastVdms = new ArrayList<>();
+        List<Vdm> oldVdms = daoVdm.getVdm();
+        ArrayList<Vdm> newVdms = new ArrayList<>();
         pageLoop:
         for (int pageNumber = 0; ; pageNumber++) {
             List<Vdm> page;
@@ -78,25 +84,26 @@ public class DownloadThread extends Thread {
 
             // Loop on the VDMs of the web page:
             for (Vdm vdm : page) {
-                if (daoVdm.contains(vdm.getNumber())) {
+                if (oldVdms.contains(vdm)) {
                     break pageLoop;
                 }
-                lastVdms.add(vdm);
-                if (lastVdms.size() >= quantityVdm) {
+                newVdms.add(vdm);
+                if (newVdms.size() >= quantityVdm) {
                     daoVdm.free();
                     break pageLoop;
                 }
             }
             page.clear();
         }
-        for (Vdm vdm : lastVdms) {
-            daoVdm.addVdm(vdm);
+        for (int i = newVdms.size() - 1; i >= 0; i--) {
+            daoVdm.addVdm(newVdms.get(i));
         }
         daoVdm.keepOnlyLastVdms(quantityVdm);
         daoVdm.commitTransaction();
-        handler.obtainMessage(VDMS_DOWNLOADED, lastVdms.size(), 0).sendToTarget();
+        handler.obtainMessage(VDMS_DOWNLOADED, newVdms.size(), 0).sendToTarget();
         daoVdm.close();
-        lastVdms.clear();
+        oldVdms.clear();
+        newVdms.clear();
     }
 
     private void downloadDtc() {

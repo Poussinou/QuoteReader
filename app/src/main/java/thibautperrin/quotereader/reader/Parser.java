@@ -46,51 +46,45 @@ class Parser {
             throw new WebPageChangedException("VDM webpage changed.", url);
         } else {
             Element body = bodies.first();
-            Elements contents = body.getElementsByClass("content");
+            Elements panelBodies = body.getElementsByClass("panel-body");
             ArrayList<Vdm> list = new ArrayList<>(10);
-            for (Element contentEl : contents) {
-                long number;
-                String content, endUrl;
-                Element parent = contentEl.parent();
-                if (parent == null) {
-                    throw new WebPageChangedException("VDM webpage changed.", url);
+            for (Element panelBody : panelBodies) {
+                Elements children = panelBody.children();
+                if (children.size() != 3) {
+                    break;
                 }
-
-                // Read number:
-                Attributes attributes = parent.attributes();
-                if (attributes.hasKey("id")) {
-                    String id = attributes.get("id");
-                    try {
-                        number = Long.parseLong(id);
-                        if (number < 2000000) { // Situation of a picture, a VDM people, or something like that.
-                            continue;
-                        }
-                    } catch (NumberFormatException e) {
-                        throw new WebPageChangedException("VDM webpage changed.", url, e);
-                    }
-                } else {
-                    continue; // Situation where this is a picture
-                }
-
-                // Read content:
-                Elements as = contentEl.getElementsByTag("a");
-                if (as.isEmpty()) {
-                    throw new WebPageChangedException("VDM webpage changed.", url);
-                } else {
-                    Element a = as.first();
-                    content = a.text();
-
-                    // Read URL:
-                    Attributes attrs = a.attributes();
-                    if (attrs.hasKey("href")) {
-                        endUrl = attrs.get("href");
-                    } else {
+                if (children.get(0).className().equals("panel-content") &&
+                        children.get(1).className().equals("panel-content")) {
+                    Element panelContent = children.get(1);
+                    Elements panelContentChildrens = panelContent.children();
+                    if (panelContentChildrens.size() != 4) {
                         throw new WebPageChangedException("VDM webpage changed.", url);
                     }
-                }
+                    Element p = panelContentChildrens.get(0);
+                    if (!p.tagName().equals("p") || !p.className().equals("block")) {
+                        throw new WebPageChangedException("VDM webpage changed.", url);
+                    }
+                    Elements pChildren = p.children();
+                    if (pChildren.size() != 1) {
+                        throw new WebPageChangedException("VDM webpage changed.", url);
+                    }
+                    Element a = pChildren.get(0);
 
-                Vdm vdm = new Vdm(content, number, endUrl);
-                list.add(vdm);
+                    List<TextNode> textNodes = a.textNodes();
+                    if (textNodes.size() == 0) {
+                        throw new WebPageChangedException("VDM webpage changed.", url);
+                    }
+                    String content = "";
+                    for (TextNode textNode : textNodes) {
+                        content += textNode.text();
+                    }
+                    if (!a.hasAttr("href")) {
+                        throw new WebPageChangedException("VDM webpage changed.", url);
+                    }
+                    String endUrl = a.attr("href");
+                    Vdm vdm = new Vdm(content, endUrl);
+                    list.add(vdm);
+                }
             }
             return list;
         }
