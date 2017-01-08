@@ -1,5 +1,6 @@
 package thibautperrin.quotereader;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -14,15 +15,21 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import thibautperrin.quotereader.fragments.DialogFragmentDownloading;
 import thibautperrin.quotereader.reader.DownloadThread;
 import thibautperrin.quotereader.fragments.PlaceHolderFragmentDTC;
 import thibautperrin.quotereader.fragments.PlaceHolderFragmentNSF;
 import thibautperrin.quotereader.fragments.PlaceHolderFragmentVDM;
 
-
 public class MainActivity extends AppCompatActivity {
 
     private DownloadThread downloadThread;
+    private DialogFragmentDownloading dialogFragmentDownloading;
+    private MainActivityHandler handler;
+
+    public DialogFragmentDownloading getDialogFragmentDownloading() {
+        return dialogFragmentDownloading;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-        MainActivityHandler handler = new MainActivityHandler(this);
+        handler = new MainActivityHandler(this);
         downloadThread = new DownloadThread(this, handler);
         downloadThread.start();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -47,8 +54,7 @@ public class MainActivity extends AppCompatActivity {
                 boolean isConnected = activeNetwork != null && activeNetwork.isConnected();
                 if (isConnected) {
                     downloadThread.update();
-                    Snackbar.make(view, R.string.downloading, Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                    showDialog();
                 } else {
                     Snackbar.make(view, R.string.noInternetConnection, Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
@@ -63,13 +69,45 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    void showDialog() {
+
+        // DialogFragment.show() will take care of adding the fragment
+        // in a transaction.  We also want to remove any currently showing
+        // dialog, so make our own transaction and take care of that here.
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        android.app.Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        dialogFragmentDownloading = DialogFragmentDownloading.newInstance();
+        dialogFragmentDownloading.show(ft, "dialog");
+    }
+
+    public void onDialogDismiss() {
+        dialogFragmentDownloading = null;
+    }
+
+    public void downloadFinished() {
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (dialogFragmentDownloading != null) {
+                    dialogFragmentDownloading.dismiss();
+                }
+            }
+        }, 1000);
+    }
+
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        public SectionsPagerAdapter(FragmentManager fm) {
+        SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 

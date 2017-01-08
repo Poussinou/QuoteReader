@@ -4,6 +4,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.widget.Toast;
 
+import thibautperrin.quotereader.fragments.DialogFragmentDownloading;
+
 import static thibautperrin.quotereader.StaticFields.*;
 
 /**
@@ -15,7 +17,8 @@ public class MainActivityHandler extends Handler {
     private static NewQuoteReceiver dtcsReceiver;
     private static NewQuoteReceiver nsfsReceiver;
 
-    public interface NewQuoteReceiver {
+    public interface
+    NewQuoteReceiver {
         void onReceive();
     }
 
@@ -31,30 +34,40 @@ public class MainActivityHandler extends Handler {
         MainActivityHandler.nsfsReceiver = quoteReceiver;
     }
 
-    public MainActivityHandler(MainActivity mainActivity) {
+    MainActivityHandler(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
     }
 
     @Override
     public void handleMessage(Message msg) {
+        DialogFragmentDownloading dialog;
         switch (msg.what) {
             case VDMS_DOWNLOADED:
                 if (vdmsReceiver != null) {
                     vdmsReceiver.onReceive();
                 }
-                Toast.makeText(mainActivity, getVdmMessage(msg.arg1), Toast.LENGTH_LONG).show();
+                 dialog = mainActivity.getDialogFragmentDownloading();
+                if (dialog != null) {
+                    dialog.finishVdm(msg.arg1);
+                }
                 break;
             case DTCS_DOWNLOADED:
                 if (dtcsReceiver != null) {
                     dtcsReceiver.onReceive();
                 }
-                Toast.makeText(mainActivity, getDtcMessage(msg.arg1), Toast.LENGTH_LONG).show();
+                dialog = mainActivity.getDialogFragmentDownloading();
+                if (dialog != null) {
+                    dialog.finishDtc(msg.arg1);
+                }
                 break;
             case NSFS_DOWNLOADED:
                 if (nsfsReceiver != null) {
                     nsfsReceiver.onReceive();
                 }
-                Toast.makeText(mainActivity, getNsfMessage(msg.arg1), Toast.LENGTH_LONG).show();
+                dialog = mainActivity.getDialogFragmentDownloading();
+                if (dialog != null) {
+                    dialog.finishNsf(msg.arg1);
+                }
                 break;
             case PARSING_ERROR_VDM:
                 Toast.makeText(mainActivity, mainActivity.getResources().getString(R.string.websiteChanged, "VDM"), Toast.LENGTH_LONG).show();
@@ -65,36 +78,22 @@ public class MainActivityHandler extends Handler {
             case PARSING_ERROR_NSF:
                 Toast.makeText(mainActivity, mainActivity.getResources().getString(R.string.websiteChanged, "NSF"), Toast.LENGTH_LONG).show();
                 break;
-        }
-    }
-
-    private String getVdmMessage(int number) {
-        if (number == 0) {
-            return mainActivity.getResources().getString(R.string.noOneDownloaded, "VDM");
-        } else if (number == 1) {
-            return mainActivity.getResources().getString(R.string.onlyOneDownloaded, "VDM");
-        } else {
-            return mainActivity.getResources().getString(R.string.severalDownloaded, number, "VDM");
-        }
-    }
-
-    private String getDtcMessage(int number) {
-        if (number == 0) {
-            return mainActivity.getResources().getString(R.string.noOneDownloaded, "DTC");
-        } else if (number == 1) {
-            return mainActivity.getResources().getString(R.string.onlyOneDownloaded, "DTC");
-        } else {
-            return mainActivity.getResources().getString(R.string.severalDownloaded, number, "DTC");
-        }
-    }
-
-    private String getNsfMessage(int number) {
-        if (number == 0) {
-            return mainActivity.getResources().getString(R.string.noOneDownloaded, "NSF");
-        } else if (number == 1) {
-            return mainActivity.getResources().getString(R.string.onlyOneDownloaded, "NSF");
-        } else {
-            return mainActivity.getResources().getString(R.string.severalDownloaded, number, "NSF");
+            case DOWNLOADING_PROGRESS:
+                dialog = mainActivity.getDialogFragmentDownloading();
+                if (dialog != null) {
+                    switch (msg.arg1) {
+                        case VDM :
+                            dialog.setPercentageVdm(msg.arg2);
+                            break;
+                        case DTC :
+                            dialog.setPercentageDtc(msg.arg2);
+                            break;
+                        case NSF :
+                            dialog.setPercentageNsf(msg.arg2);
+                            break;
+                    }
+                }
+                break;
         }
     }
 }

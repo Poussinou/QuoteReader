@@ -14,4 +14,8 @@ public class StaticFields {
     public static final int PARSING_ERROR_VDM = 7;
     public static final int PARSING_ERROR_DTC = 8;
     public static final int PARSING_ERROR_NSF = 9;
+    public static final int DOWNLOADING_PROGRESS = 10;
+    public static final int VDM = 11;
+    public static final int DTC = 12;
+    public static final int NSF = 13;
 }

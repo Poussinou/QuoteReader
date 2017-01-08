@@ -16,11 +16,15 @@ import thibautperrin.quotereader.dao.DaoVdm;
 import thibautperrin.quotereader.reader.parserException.NotExistingUrlException;
 import thibautperrin.quotereader.reader.parserException.WebPageChangedException;
 
+import static thibautperrin.quotereader.StaticFields.DOWNLOADING_PROGRESS;
+import static thibautperrin.quotereader.StaticFields.DTC;
 import static thibautperrin.quotereader.StaticFields.DTCS_DOWNLOADED;
+import static thibautperrin.quotereader.StaticFields.NSF;
 import static thibautperrin.quotereader.StaticFields.NSFS_DOWNLOADED;
 import static thibautperrin.quotereader.StaticFields.PARSING_ERROR_DTC;
 import static thibautperrin.quotereader.StaticFields.PARSING_ERROR_NSF;
 import static thibautperrin.quotereader.StaticFields.PARSING_ERROR_VDM;
+import static thibautperrin.quotereader.StaticFields.VDM;
 import static thibautperrin.quotereader.StaticFields.VDMS_DOWNLOADED;
 
 /**
@@ -45,9 +49,34 @@ public class DownloadThread extends Thread {
     public void run() {
         while (shouldContinue.get()) {
             while (download.get()) {
-                downloadNsf();
-                downloadDtc();
-                downloadVdm();
+                Thread threadVdm = new Thread() {
+                    @Override
+                    public void run() {
+                        downloadVdm();
+                    }
+                };
+                threadVdm.start();
+                Thread threadDtc = new Thread() {
+                    @Override
+                    public void run() {
+                        downloadDtc();
+                    }
+                };
+                threadDtc.start();
+                Thread threadNsf = new Thread() {
+                    @Override
+                    public void run() {
+                        downloadNsf();
+                    }
+                };
+                threadNsf.start();
+                try {
+                    threadVdm.join();
+                    threadDtc.join();
+                    threadNsf.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 download.set(false);
             }
             try {
@@ -88,6 +117,7 @@ public class DownloadThread extends Thread {
                     break pageLoop;
                 }
                 newVdms.add(vdm);
+                handler.obtainMessage(DOWNLOADING_PROGRESS, VDM, newVdms.size()).sendToTarget();
                 if (newVdms.size() >= quantityVdm) {
                     daoVdm.free();
                     break pageLoop;
@@ -131,6 +161,7 @@ public class DownloadThread extends Thread {
                 }
                 quantityDownloaded++;
                 daoDtc.addDtc(dtc);
+                handler.obtainMessage(DOWNLOADING_PROGRESS, DTC, quantityDownloaded).sendToTarget();
                 if (quantityDownloaded >= quantityDtc) {
                     break pageLoop;
                 }
@@ -167,6 +198,7 @@ public class DownloadThread extends Thread {
                 }
                 numberDownloaded++;
                 daoNsf.addNsf(nsf);
+                handler.obtainMessage(DOWNLOADING_PROGRESS, NSF, numberDownloaded).sendToTarget();
                 if (numberDownloaded >= quantityNsf) {
                     break pageLoop;
                 }

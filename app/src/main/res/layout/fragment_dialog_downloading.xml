@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp">
+
+        <TextView
+            android:id="@+id/textViewVDM"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:text="@string/VDM" />
+
+        <ProgressBar
+            android:id="@+id/progressBarDownloadingVdm"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignBottom="@+id/textViewVDM"
+            android:layout_toEndOf="@+id/textViewVDM"
+            android:layout_toRightOf="@+id/textViewVDM"
+            android:indeterminate="false"
+            android:max="100" />
+
+        <TextView
+            android:id="@+id/vdm_downloaded"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignBottom="@+id/textViewVDM"
+            android:layout_toEndOf="@+id/textViewVDM"
+            android:layout_toRightOf="@+id/textViewVDM"
+            android:textAlignment="center" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp">
+
+        <TextView
+            android:id="@+id/textViewDTC"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:text="@string/DTC" />
+
+        <ProgressBar
+            android:id="@+id/progressBarDownloadingDtc"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignBottom="@+id/textViewDTC"
+            android:layout_toEndOf="@+id/textViewDTC"
+            android:layout_toRightOf="@+id/textViewDTC"
+            android:indeterminate="false"
+            android:max="100" />
+
+        <TextView
+            android:id="@+id/dtc_downloaded"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignBottom="@+id/textViewDTC"
+            android:layout_toEndOf="@+id/textViewDTC"
+            android:layout_toRightOf="@+id/textViewDTC"
+            android:textAlignment="center" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp">
+
+        <TextView
+            android:id="@+id/textViewNsf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:text="@string/NSF" />
+
+        <ProgressBar
+            android:id="@+id/progressBarDownloadingNsf"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignBottom="@+id/textViewNsf"
+            android:layout_toEndOf="@+id/textViewNsf"
+            android:layout_toRightOf="@+id/textViewNsf"
+            android:indeterminate="false"
+            android:max="100" />
+
+        <TextView
+            android:id="@+id/nsf_downloaded"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignBottom="@+id/textViewNsf"
+            android:layout_toEndOf="@+id/textViewNsf"
+            android:layout_toRightOf="@+id/textViewNsf"
+            android:textAlignment="center" />
+
+    </RelativeLayout>
+
+
+</LinearLayout>

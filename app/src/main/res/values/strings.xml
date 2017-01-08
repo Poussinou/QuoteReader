@@ -2,9 +2,8 @@
     <string name="app_name">VDM DTC NSF</string>
     <string name="downloading">Téléchargement</string>
     <string name="noInternetConnection">Pas de connexion internet</string>
-    <string name="noOneDownloaded">Aucune %1$s n\'a été téléchargée</string>
-    <string name="onlyOneDownloaded">Une seule %1$s a été téléchargée</string>
-    <string name="severalDownloaded">%1$d %2$ss ont été téléchargées</string>
+    <string name="singularDownloaded">%1$d téléchargée</string>
+    <string name="pluralDownloaded">%1$d téléchargées</string>
     <string name="websiteChanged">Le site Web de %1$s a changé. Patientez jusqu\'à la prochaine mise à jour de l\'application pour lire à nouveau les %1$ss.</string>
     <string name="share_quote">Salut, regarde la dernière %1$s:
 \r\n\r\n
@@ -14,4 +13,7 @@ La page officielle est ici: %3$s
 \r\n\r\n
 Personnellement, je l\'ai lu sur cette application: https://play.google.com/store/apps/details?id=thibautperrin.quotereader&amp;hl=fr</string>
     <string name="title_share">Partager la %1$s :\r\n</string>
+    <string name="VDM">VDM</string>
+    <string name="DTC">DTC</string>
+    <string name="NSF">NSF</string>
 </resources>
