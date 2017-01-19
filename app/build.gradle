@@ -8,8 +8,8 @@ android {
         applicationId "thibautperrin.quotereader"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 8
-        versionName "1.4.0"
+        versionCode 9
+        versionName "1.4.1"
     }
     buildTypes {
         release {
