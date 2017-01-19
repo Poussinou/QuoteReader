@@ -16,4 +16,5 @@ Personnellement, je l\'ai lu sur cette application: https://play.google.com/stor
     <string name="VDM">VDM</string>
     <string name="DTC">DTC</string>
     <string name="NSF">NSF</string>
+    <string name="falure">Error</string>
 </resources>

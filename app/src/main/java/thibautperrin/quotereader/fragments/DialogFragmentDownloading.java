@@ -130,7 +130,11 @@ public class DialogFragmentDownloading extends DialogFragment {
         }
         if (textViewDownloadedVdm != null) {
             textViewDownloadedVdm.setVisibility(View.VISIBLE);
-            textViewDownloadedVdm.setText(getStringNbDownloaded(nbVdm));
+            if (numberVdm >= 0) {
+                textViewDownloadedVdm.setText(getStringNbDownloaded(nbVdm));
+            } else {
+                textViewDownloadedVdm.setText(getString(R.string.falure));
+            }
         }
         testEverythingFinished();
     }
@@ -143,7 +147,11 @@ public class DialogFragmentDownloading extends DialogFragment {
         }
         if (textViewDownloadedDtc != null) {
             textViewDownloadedDtc.setVisibility(View.VISIBLE);
-            textViewDownloadedDtc.setText(getStringNbDownloaded(nbDtc));
+            if (nbDtc >= 0) {
+                textViewDownloadedDtc.setText(getStringNbDownloaded(nbDtc));
+            } else {
+                textViewDownloadedDtc.setText(getString(R.string.falure));
+            }
         }
         testEverythingFinished();
     }
@@ -156,7 +164,11 @@ public class DialogFragmentDownloading extends DialogFragment {
         }
         if (textViewDownloadedNsf != null) {
             textViewDownloadedNsf.setVisibility(View.VISIBLE);
-            textViewDownloadedNsf.setText(getStringNbDownloaded(nbNsf));
+            if (nbNsf >= 0) {
+                textViewDownloadedNsf.setText(getStringNbDownloaded(nbNsf));
+            } else {
+                textViewDownloadedNsf.setText(getString(R.string.falure));
+            }
         }
         testEverythingFinished();
     }

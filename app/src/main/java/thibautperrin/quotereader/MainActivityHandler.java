@@ -40,13 +40,12 @@ public class MainActivityHandler extends Handler {
 
     @Override
     public void handleMessage(Message msg) {
-        DialogFragmentDownloading dialog;
+        DialogFragmentDownloading dialog = mainActivity.getDialogFragmentDownloading();
         switch (msg.what) {
             case VDMS_DOWNLOADED:
                 if (vdmsReceiver != null) {
                     vdmsReceiver.onReceive();
                 }
-                 dialog = mainActivity.getDialogFragmentDownloading();
                 if (dialog != null) {
                     dialog.finishVdm(msg.arg1);
                 }
@@ -55,7 +54,6 @@ public class MainActivityHandler extends Handler {
                 if (dtcsReceiver != null) {
                     dtcsReceiver.onReceive();
                 }
-                dialog = mainActivity.getDialogFragmentDownloading();
                 if (dialog != null) {
                     dialog.finishDtc(msg.arg1);
                 }
@@ -64,22 +62,29 @@ public class MainActivityHandler extends Handler {
                 if (nsfsReceiver != null) {
                     nsfsReceiver.onReceive();
                 }
-                dialog = mainActivity.getDialogFragmentDownloading();
                 if (dialog != null) {
                     dialog.finishNsf(msg.arg1);
                 }
                 break;
             case PARSING_ERROR_VDM:
                 Toast.makeText(mainActivity, mainActivity.getResources().getString(R.string.websiteChanged, "VDM"), Toast.LENGTH_LONG).show();
+                if (dialog != null) {
+                    dialog.finishVdm(-1);
+                }
                 break;
             case PARSING_ERROR_DTC:
                 Toast.makeText(mainActivity, mainActivity.getResources().getString(R.string.websiteChanged, "DTC"), Toast.LENGTH_LONG).show();
+                if (dialog != null) {
+                    dialog.finishDtc(-1);
+                }
                 break;
             case PARSING_ERROR_NSF:
                 Toast.makeText(mainActivity, mainActivity.getResources().getString(R.string.websiteChanged, "NSF"), Toast.LENGTH_LONG).show();
+                if (dialog != null) {
+                    dialog.finishNsf(-1);
+                }
                 break;
             case DOWNLOADING_PROGRESS:
-                dialog = mainActivity.getDialogFragmentDownloading();
                 if (dialog != null) {
                     switch (msg.arg1) {
                         case VDM :
