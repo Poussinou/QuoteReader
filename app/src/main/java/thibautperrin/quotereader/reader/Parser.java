@@ -35,7 +35,7 @@ class Parser {
         Document doc;
         String url = "http://www.viedemerde.fr/?page=" + pageNumber;
         try {
-            doc = Jsoup.connect(url).timeout(5000).get();
+            doc = Jsoup.connect(url).timeout(50000).get();
         } catch (IOException ex) {
             throw new NotExistingUrlException(url, ex);
         }
@@ -57,7 +57,7 @@ class Parser {
                         children.get(1).className().equals("panel-content")) {
                     Element panelContent = children.get(1);
                     Elements panelContentChildrens = panelContent.children();
-                    if (panelContentChildrens.size() != 4) {
+                    if (panelContentChildrens.size() == 0) {
                         throw new WebPageChangedException("VDM webpage changed.", url);
                     }
                     Element p = panelContentChildrens.get(0);
