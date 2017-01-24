@@ -165,7 +165,7 @@ class Parser {
     public static List<Dtc> getDtcPage(int pageNumber) throws NotExistingUrlException, WebPageChangedException {
         // Load the web page:
         Document doc;
-        String url = "http://danstonchat.com/latest/" + pageNumber + ".html";
+        String url = "https://danstonchat.com/latest/" + pageNumber + ".html";
         try {
             doc = Jsoup.connect(url).timeout(5000).get();
         } catch (IOException ex) {
@@ -180,10 +180,10 @@ class Parser {
             for (Element p : elements) {
                 Element a = p.child(0);
                 String href = a.attributes().get("href");
-                if (!href.startsWith("http://danstonchat.com/")) {
+                if (!href.startsWith("https://danstonchat.com/")) {
                     throw new WebPageChangedException("DTC webpage changed.", url);
                 }
-                String s = href.substring(23).split("[.]")[0];
+                String s = href.substring(24).split("[.]")[0];
                 int number = Integer.parseInt(s);
                 ArrayList<Sentence> sentences = new ArrayList<>();
                 List<Node> nodes = a.childNodes();
